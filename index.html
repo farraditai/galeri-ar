@@ -1,0 +1,39 @@
+<html>
+  <head>
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>Galeri AR</title>
+    <script src="https://aframe.io/releases/1.4.2/aframe.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/mind-ar@1.2.5/dist/mindar-image-aframe.prod.js"></script>
+  </head>
+  <body>
+    <a-scene mindar-image="imageTargetSrc: ./targets.mind;" color-space="sRGB" renderer="colorManagement: true, physicallyCorrectLights" vr-mode-ui="enabled: false" device-orientation-permission-ui="enabled: false">
+      
+      <a-assets>
+        <video id="my-video" src="./video.mp4" webkit-playsinline playsinline loop muted></video>
+      </a-assets>
+
+      <a-camera position="0 0 0" look-controls="enabled: false"></a-camera>
+
+      <a-entity mindar-image-target="targetIndex: 0" id="target-1">
+        <a-video src="#my-video" width="1" height="0.75" position="0 0 0" rotation="0 0 0"></a-video>
+      </a-entity>
+    </a-scene>
+
+    <script>
+      const target = document.querySelector('#target-1');
+      const video = document.querySelector('#my-video');
+
+      // Saat gambar terdeteksi kamera
+      target.addEventListener("targetFound", event => {
+        console.log("Gambar terdeteksi!");
+        video.play();
+      });
+
+      // Saat kamera melenceng/gambar hilang dari pandangan
+      target.addEventListener("targetLost", event => {
+        console.log("Gambar hilang dari kamera.");
+        video.pause();
+      });
+    </script>
+  </body>
+</html>
